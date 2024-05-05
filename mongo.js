@@ -13,8 +13,17 @@ class mongodb {
     async insertOne(collection, data) {
       return await this.db.collection(collection).insertOne(data);
     }
-    async find(collection, data) {
-      return await this.db.collection(collection).find(data).toArray();
+    async find(collection, data , project = null, sort_by = null) {
+      let find_cursor = this.db.collection(collection).find(data);
+      if(project != null)
+      {
+        find_cursor = find_cursor.project(project);
+      }
+      if(sort_by != null)
+      {
+        find_cursor = find_cursor.sort(sort_by);
+      }
+      return await find_cursor.toArray();
     }
     async updateOne(collection, data, newData) {
       return await this.db.collection(collection).updateOne(data, newData);
@@ -25,6 +34,11 @@ class mongodb {
     async deleteMany(collection, data) {
       return await this.db.collection(collection).deleteMany(data);
     }
+    async aggregate(collection,data)
+    {
+      return await this.db.collection(collection).aggregate(data).toArray();
+    }
+
   }
   
   exports.mongodb = mongodb;
