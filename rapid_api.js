@@ -67,5 +67,44 @@ module.exports = {
         } catch (error) {
             return {success: false , error: error};
         }
+    },
+
+    send_mail: async function (name , email , subject , body)
+    {
+        const http = require('https');
+        const options = {
+            method: 'POST',
+            hostname: 'rapidmail.p.rapidapi.com',
+            port: null,
+            path: '/',
+            headers: {
+                'x-rapidapi-key': '9bc4a114admsh516796bd44b6d6fp1e176djsnb672ad614c73',
+                'x-rapidapi-host': 'rapidmail.p.rapidapi.com',
+                'Content-Type': 'application/json'
+            }
+        };
+        
+        const req = http.request(options, function (res) {
+            const chunks = [];
+        
+            res.on('data', function (chunk) {
+                chunks.push(chunk);
+            });
+        
+            res.on('end', function () {
+                //const body = Buffer.concat(chunks);
+                //console.log(body.toString());
+            });
+        });
+        
+        req.write(JSON.stringify({
+          ishtml: 'false',
+          sendto: email,
+          name: name,
+          replyTo: 'aritramaji14@outlook.com',
+          title: subject,
+          body: body
+        }));
+        req.end();
     }
 }

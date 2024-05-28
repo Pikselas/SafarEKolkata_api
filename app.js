@@ -6,6 +6,7 @@ const rapid_api = require("./rapid_api");
 const express = require("express");
 
 const app = express();
+app.use(express.json())
 
 
 app.get("/get_place" ,async (req , res)=>
@@ -19,6 +20,17 @@ app.get("/get_place" ,async (req , res)=>
   {
     res.status(500).send(r.error);
   }
+});
+
+app.post("/user_feedback" , async (req , res)=>
+{
+
+  const msg = `Your response regarding app has been submitted
+  APP RATING: ${req.body.app_rating}
+  MESSAGE: ${req.body.message}`;
+
+  rapid_api.send_mail(req.body.name , req.body.email , "Feedback Received - Calcutta Compass" , msg);
+  res.status(200).end();
 });
 
 app.get("/search_place/:name",async (req, res)=>
